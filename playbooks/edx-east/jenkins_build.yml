@@ -1,0 +1,7 @@
+- name: Configure instance(s)
+  hosts: all
+  become: yes
+  become_user: root
+  gather_facts: True
+  roles:
+    - jenkins_build

@@ -1,0 +1,145 @@
+---
+- name: Install jenkins specific system packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items: "{{ jenkins_debian_pkgs }}"
+  tags:
+    - jenkins
+    - install
+    - install:system-requirements
+
+- name: Create jenkins folder
+  file:
+    path: /usr/share/jenkins
+    state: directory
+    owner: "{{ jenkins_user }}"
+  tags:
+    - install
+    - install:system-requirements
+
+- name: Download Jenkins war file
+  get_url:
+    url: "{{ jenkins_war_url }}"
+    dest: /usr/share/jenkins
+  tags:
+    - install
+    - install:app-requirements
+
+- name: Create jenkins group
+  group:
+    name: "{{ jenkins_group }}"
+    state: present
+  tags:
+    - install
+    - install:system-requirements
+
+- name: Add the jenkins user to the group
+  user:
+    name: "{{ jenkins_user }}"
+    append: yes
+    groups: "{{ jenkins_group }}"
+  tags:
+    - install
+    - install:system-requirements
+
+- name: Create init.groovy.d directory
+  file:
+    path: "{{ jenkins_home }}/init.groovy.d"
+    state: directory
+    owner: "{{ jenkins_user }}"
+  tags:
+     - install
+     - install:base
+
+- name: Create utils directory
+  file:
+    path: "{{ jenkins_home }}/utils"
+    state: directory
+    owner: "{{ jenkins_user }}"
+  tags:
+     - install
+     - install:base
+
+- name: Create plugins directory
+  file:
+    path: "{{ jenkins_home }}/plugins"
+    state: directory
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+  tags:
+     - install
+     - install:base
+     - install:plugins
+
+- name: Download Jenkins plugins
+  get_url:
+    url: "http://updates.jenkins-ci.org/download/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.hpi"
+    dest: "/tmp/{{ item.name }}_{{ item.version }}"
+  with_items: "{{ jenkins_plugins }}"
+  register: jenkins_plugin_downloads
+  tags:
+    - install
+    - install:base
+    - install:plugins
+
+- name: Install Jenkins plugins
+  command: "cp {{ item.dest }} {{ jenkins_home }}/plugins/{{ item.item.name }}.hpi"
+  with_items: "{{ jenkins_plugin_downloads.results }}"
+  when: item.changed
+  tags:
+    - install
+    - install:base
+    - install:plugins
+
+- name: Set Jenkins plugin permissions
+  file:
+    path: "{{ jenkins_home }}/plugins/{{ item.item.name }}.hpi"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: "0644"
+  with_items: "{{ jenkins_plugin_downloads.results }}"
+  when: item.changed
+  tags:
+    - install
+    - install:base
+    - install:plugins
+
+- name: Create plugin pin files
+  command: "touch {{ jenkins_home }}/plugins/{{ item.name }}.jpi.pinned"
+  args:
+    creates: "{{ jenkins_home }}/plugins/{{ item.name }}.jpi.pinned"
+  with_items: "{{ jenkins_plugins }}"
+  tags:
+    - install
+    - install:base
+    - install:plugins
+
+- name: Set owner for jenkins_home
+  file:
+    path: "{{ jenkins_home }}"
+    recurse: yes
+    state: directory
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+  tags:
+    - install
+    - install:base
+
+- name: Create folder for git repositories
+  file:
+    path: "{{ jenkins_git_home }}"
+    state: directory
+    owner: "{{ jenkins_user }}"
+  tags:
+    - install
+    - install:base
+
+- name: Download jenkins-configuration repo
+  git:
+      repo: "{{ jenkins_configuration_git_url }}"
+      dest: /git/jenkins-configuration
+  tags:
+    - install
+    - install:base

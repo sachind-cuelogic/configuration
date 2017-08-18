@@ -1,0 +1,19 @@
+jenkins_user: "jenkins"
+jenkins_group: "edx"
+jenkins_home: /var/lib/jenkins
+
+jenkins_war_name: jenkins_1.651.3.war
+jenkins_war_url: https://s3.amazonaws.com/edx-testeng-tools/jenkins/{{ jenkins_war_name }}
+
+jenkins_debian_pkgs:
+  - nginx
+  - git
+  - curl
+  - maven
+  - daemon
+  - psmisc
+
+jenkins_plugins: []
+
+jenkins_configuration_git_url: https://github.com/edx/jenkins-configuration.git
+jenkins_git_home: /git

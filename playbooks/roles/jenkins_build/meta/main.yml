@@ -1,0 +1,20 @@
+---
+dependencies:
+  - common
+  - edxapp_common
+  - browsers
+  - role: jenkins_common
+    jenkins_user: "{{ build_jenkins_user }}"
+    jenkins_group: "{{ build_jenkins_group }}"
+    jenkins_home: "{{ build_jenkins_home }}"
+    java_home: "{{ build_jenkins_java_home }}"
+    jenkins_debian_pkgs: "{{ build_jenkins_debian_pkgs }}"
+    jenkins_war_name: "{{ build_jenkins_war_name }}"
+    jenkins_war_url: "{{ build_jenkins_war_url }}"
+    jenkins_plugins: "{{ build_jenkins_plugins }}" 
+    jenkins_git_home: "{{ build_jenkins_git_home }}"
+    jenkins_configuration_git_url: "{{ build_jenkins_configuration_git_url }}"
+
+  - role: docker-tools
+    docker_users:
+        - '{{ jenkins_user }}'
