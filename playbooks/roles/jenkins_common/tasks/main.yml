@@ -116,17 +116,6 @@
     - install:base
     - install:plugins
 
-- name: Set owner for jenkins_home
-  file:
-    path: "{{ jenkins_home }}"
-    recurse: yes
-    state: directory
-    owner: "{{ jenkins_user }}"
-    group: "{{ jenkins_group }}"
-  tags:
-    - install
-    - install:base
-
 - name: Create folder for git repositories
   file:
     path: "{{ jenkins_git_home }}"
@@ -140,6 +129,17 @@
   git:
       repo: "{{ jenkins_configuration_git_url }}"
       dest: /git/jenkins-configuration
+  tags:
+    - install
+    - install:base
+
+- name: Set owner for jenkins_home
+  file:
+    path: "{{ jenkins_home }}"
+    recurse: yes
+    state: directory
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
   tags:
     - install
     - install:base
