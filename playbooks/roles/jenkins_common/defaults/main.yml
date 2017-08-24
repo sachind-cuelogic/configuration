@@ -1,9 +1,14 @@
 jenkins_user: "jenkins"
 jenkins_group: "edx"
 jenkins_home: /var/lib/jenkins
+jenkins_port: 8080
 
 jenkins_war_name: jenkins_1.651.3.war
 jenkins_war_url: https://s3.amazonaws.com/edx-testeng-tools/jenkins/{{ jenkins_war_name }}
+
+jenkins_nginx_port: 80
+jenkins_protocol_https: true
+jenkins_server_name: "testeng"
 
 jenkins_debian_pkgs:
   - nginx
