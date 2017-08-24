@@ -1,6 +1,7 @@
 jenkins_user: "jenkins"
 jenkins_group: "edx"
 jenkins_home: /var/lib/jenkins
+jenkins_config_path: /init-configs
 jenkins_port: 8080
 
 jenkins_war_name: jenkins_1.651.3.war

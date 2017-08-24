@@ -18,7 +18,7 @@ build_jenkins_debian_pkgs:
 
 build_jenkins_configuration_git_url: https://github.com/edx/jenkins-configuration.git
 build_jenkins_git_home: /git
-build_jenkins_config_files: /init-configs
+build_jenkins_config_path: /init-configs
 
 build_jenkins_configuration_scripts:
   - 1addJarsToClasspath.groovy

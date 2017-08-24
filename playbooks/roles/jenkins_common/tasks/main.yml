@@ -62,6 +62,15 @@
      - install
      - install:base
 
+- name: Create jenkins config directory
+  file:
+    path: "{{ jenkins_config_path }}"
+    state: directory
+    owner: "{{ jenkins_user }}"
+  tags:
+     - install
+     - install:base
+
 - name: Create plugins directory
   file:
     path: "{{ jenkins_home }}/plugins"
@@ -160,3 +169,11 @@
   tags:
     - install
     - install:vhosts
+
+- name: Add env var
+  template:
+    src: "jenkins-env.sh.j2"
+    dest: "/etc/profile.d/jenkins-env.sh"
+    owner: root
+    group: root
+    mode: "0755"

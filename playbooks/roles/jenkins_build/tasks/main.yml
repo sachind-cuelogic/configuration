@@ -2,7 +2,7 @@
 - name: Copy config documents
   copy:
     src: "{{ role_path }}/files/"
-    dest: "{{ build_jenkins_config_files }}/"
+    dest: "{{ build_jenkins_config_path }}/"
   tags:
     - install
     - install:system-requirements

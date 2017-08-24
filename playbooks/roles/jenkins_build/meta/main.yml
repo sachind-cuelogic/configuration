@@ -7,6 +7,7 @@ dependencies:
     jenkins_user: "{{ build_jenkins_user }}"
     jenkins_group: "{{ build_jenkins_group }}"
     jenkins_home: "{{ build_jenkins_home }}"
+    jenkins_config_path: "{{ build_jenkins_config_path }}"
     java_home: "{{ build_jenkins_java_home }}"
     jenkins_debian_pkgs: "{{ build_jenkins_debian_pkgs }}"
     jenkins_war_name: "{{ build_jenkins_war_name }}"
