@@ -1,12 +1,3 @@
-build_jenkins_user: "jenkins"
-build_jenkins_group: "edx"
-build_jenkins_port: 8080
-build_jenkins_home: /var/lib/jenkins
-build_jenkins_java_home: /usr/lib/jvm/java-8-openjdk-amd64
-
-build_jenkins_war_name: jenkins_1.651.3.war
-build_jenkins_war_url: https://s3.amazonaws.com/edx-testeng-tools/jenkins/{{ jenkins_war_name }}
-
 build_jenkins_debian_pkgs:
   - git
   - curl
@@ -16,8 +7,6 @@ build_jenkins_debian_pkgs:
   - daemon
   - psmisc
 
-build_jenkins_configuration_git_url: https://github.com/edx/jenkins-configuration.git
-build_jenkins_git_home: /git
 build_jenkins_config_path: /init-configs
 
 build_jenkins_configuration_scripts:

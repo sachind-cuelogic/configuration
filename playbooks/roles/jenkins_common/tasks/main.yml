@@ -22,7 +22,7 @@
 - name: Download Jenkins war file
   get_url:
     url: "{{ jenkins_war_url }}"
-    dest: /usr/share/jenkins
+    dest: /usr/share/jenkins/jenkins.war
   tags:
     - install
     - install:app-requirements
@@ -137,7 +137,14 @@
 - name: Download jenkins-configuration repo
   git:
       repo: "{{ jenkins_configuration_git_url }}"
-      dest: /git/jenkins-configuration
+      dest: "{{ jenkins_git_home }}/jenkins-configuration"
+  tags:
+    - install
+    - install:base
+
+- name: Copy init scripts into init.groovy.d
+  command: "cp {{ jenkins_git_home }}/jenkins-configuration/{{ jenkins_configuration_src_path }}/{{ item }} {{ jenkins_home }}/init.groovy.d/"
+  with_items: "{{ jenkins_configuration_scripts }}"
   tags:
     - install
     - install:base
