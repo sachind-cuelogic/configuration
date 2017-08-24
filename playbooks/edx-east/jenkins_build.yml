@@ -1,7 +1,6 @@
 - name: Configure instance(s)
   hosts: all
-  become: yes
-  become_user: root
+  become: True
   gather_facts: True
   roles:
     - jenkins_build

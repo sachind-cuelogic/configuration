@@ -10,23 +10,6 @@
     - install
     - install:system-requirements
 
-- name: Create jenkins folder
-  file:
-    path: /usr/share/jenkins
-    state: directory
-    owner: "{{ jenkins_user }}"
-  tags:
-    - install
-    - install:system-requirements
-
-- name: Download Jenkins war file
-  get_url:
-    url: "{{ jenkins_war_url }}"
-    dest: /usr/share/jenkins/jenkins.war
-  tags:
-    - install
-    - install:app-requirements
-
 - name: Create jenkins group
   group:
     name: "{{ jenkins_group }}"
@@ -43,6 +26,23 @@
   tags:
     - install
     - install:system-requirements
+
+- name: Create jenkins folder
+  file:
+    path: /usr/share/jenkins
+    state: directory
+    owner: "{{ jenkins_user }}"
+  tags:
+    - install
+    - install:system-requirements
+
+- name: Download Jenkins war file
+  get_url:
+    url: "{{ jenkins_war_url }}"
+    dest: /usr/share/jenkins/jenkins.war
+  tags:
+    - install
+    - install:app-requirements
 
 - name: Create init.groovy.d directory
   file:
@@ -94,7 +94,7 @@
     - install:plugins
 
 - name: Install Jenkins plugins
-  command: "cp {{ item.dest }} {{ jenkins_home }}/plugins/{{ item.item.name }}.hpi"
+  command: "cp {{ item.dest }} {{ jenkins_home }}/plugins/{{ item.item.name }}.jpi"
   with_items: "{{ jenkins_plugin_downloads.results }}"
   when: item.changed
   tags:
@@ -104,7 +104,7 @@
 
 - name: Set Jenkins plugin permissions
   file:
-    path: "{{ jenkins_home }}/plugins/{{ item.item.name }}.hpi"
+    path: "{{ jenkins_home }}/plugins/{{ item.item.name }}.jpi"
     owner: "{{ jenkins_user }}"
     group: "{{ jenkins_group }}"
     mode: "0644"
@@ -149,17 +149,6 @@
     - install
     - install:base
 
-- name: Set owner for jenkins_home
-  file:
-    path: "{{ jenkins_home }}"
-    recurse: yes
-    state: directory
-    owner: "{{ jenkins_user }}"
-    group: "{{ jenkins_group }}"
-  tags:
-    - install
-    - install:base
-
 - name: Setup nginx vhost
   template:
     src: "etc/nginx/sites-available/jenkins.j2"
@@ -177,10 +166,10 @@
     - install
     - install:vhosts
 
-- name: Add env var
+- name: Add env vars
   template:
     src: "jenkins-env.sh.j2"
     dest: "/etc/profile.d/jenkins-env.sh"
-    owner: "{{ jenkins_user }}"
-    group: "{{ jenkins_group }}"
+    owner: root
+    group: root
     mode: "0755"
