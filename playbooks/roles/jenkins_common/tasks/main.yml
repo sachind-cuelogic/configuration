@@ -181,6 +181,6 @@
   template:
     src: "jenkins-env.sh.j2"
     dest: "/etc/profile.d/jenkins-env.sh"
-    owner: root
-    group: root
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
     mode: "0755"
